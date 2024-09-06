@@ -39,6 +39,16 @@ final class HTTPRequestBuilderTests: XCTestCase {
 
     let path4: Path = users / Action.edit
     XCTAssertEqual(path4.fragments, ["users", "edit"])
+
+    let path5 = Path("users") / "12"
+    XCTAssertEqual(path5.fragments, ["users", "12"])
+
+    func apiVersion(_ version: Int) -> Path {
+      .init("v\(version)") / path5.fragments
+    }
+
+    let path6 = apiVersion(1)
+    XCTAssertEqual(path6.fragments, ["v1", "users", "12"])
   }
 
   func testResultBuilder() throws {

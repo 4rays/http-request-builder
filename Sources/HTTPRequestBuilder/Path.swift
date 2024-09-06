@@ -71,10 +71,10 @@ public func / <T: RawRepresentable>(
 
 public func / (
   lhs: Path,
-  rhs: [CustomStringConvertible]
+  rhs: [String]
 ) -> Path {
   var new = lhs
-  new.fragments.append(contentsOf: rhs.map(\.description))
+  new.fragments.append(contentsOf: rhs)
   return new
 }
 
