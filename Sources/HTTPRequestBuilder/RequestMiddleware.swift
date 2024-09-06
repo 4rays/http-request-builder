@@ -19,6 +19,32 @@ public func path(
   }
 }
 
+/// Append to the path of the request.
+///  - Parameter component: The path component to append.
+///  - Returns: A request middleware.
+public func pathAppending(
+  _ component: CustomStringConvertible
+) -> RequestMiddleware {
+  { request in
+    var newRequest = request
+    newRequest.path = request.path / component
+    return newRequest
+  }
+}
+
+/// Append to the path of the request.
+///  - Parameter component: The path component to append.
+///  - Returns: A request middleware.
+public func pathAppending<T: RawRepresentable>(
+  _ component: T
+) -> RequestMiddleware where T.RawValue == String {
+  { request in
+    var newRequest = request
+    newRequest.path = request.path / component
+    return newRequest
+  }
+}
+
 /// Add headers to the request.
 /// - Parameters:
 ///  - key: The header key.

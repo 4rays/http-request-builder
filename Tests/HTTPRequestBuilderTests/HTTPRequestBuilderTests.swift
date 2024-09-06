@@ -92,4 +92,24 @@ final class HTTPRequestBuilderTests: XCTestCase {
     XCTAssertEqual(urlRequest.url, URL(string: "https://api.example.com/users/12"))
   }
 
+  func testPathAppending() throws {
+    enum Action: String {
+      case edit
+      case view
+    }
+
+    @RequestBuilder
+    var example: RequestMiddleware {
+      path("/users")
+      pathAppending("12")
+      pathAppending(Action.edit)
+      pathAppending(3)
+    }
+
+    let request = try example(
+      Request()
+    )
+
+    XCTAssertEqual(request.path.fragments, ["users", "12", "edit", "3"])
+  }
 }

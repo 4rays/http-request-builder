@@ -52,10 +52,7 @@ func getUser(id: Int) -> RequestMiddleware {
 }
 ```
 
-Note that the order inside the builder does not matter and middleware are applied
-in the order they are defined. If the same middleware is defined multiple times,
-the last one will be used. If you're defining custom middleware, try to make them idempotent so as to
-avoid unexpected behavior.
+Note that the order inside the builder only matters for middleware that are not idempotent, such as the built-in `pathAppending`.
 
 Once you have an endpoint defined, you can use it to create a request for Foundation.
 
@@ -110,6 +107,25 @@ let createUser = users/Action.create
 let games = api/"games"
 let createGame = games/"create"
 let featuredGames = games/"featured"
+```
+
+You can also compose paths using the built-in `pathAppending` middleware.
+
+```swift
+import HTTPRequestBuilder
+
+@RequestBuilder
+var userEndpoints: RequestMiddleware = {
+  path("/users")
+}
+
+@RequestBuilder
+func editUser(id: Int) -> RequestMiddleware {
+  userEndpoints
+  pathAppending("/edit")
+  pathAppending(id)
+  Method.put
+}
 ```
 
 ## Authentication Middleware
