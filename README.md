@@ -144,7 +144,14 @@ var signIn: RequestMiddleware = {
 
 ## Custom Middleware
 
-You can define your own middleware functions to encapsulate common logic.
+A middleware is a function that takes a request and returns a new request.
+
+```swift
+(Request) throws -> (Request)
+```
+
+You can define your own middleware functions to encapsulate common logic
+unique to your use case.
 
 ```swift
 import HTTPRequestBuilder
@@ -172,7 +179,3 @@ var myRequest: RequestMiddleware = {
 ## License
 
 This library is released under the MIT license. See LICENSE for details.
-
-```
-
-```
