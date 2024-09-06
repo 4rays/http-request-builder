@@ -1,5 +1,4 @@
 import Foundation
-import HTTPTypes
 
 /// An honest-to-goodness HTTP request.
 public struct Request: Sendable, Hashable {
