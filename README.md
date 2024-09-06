@@ -98,7 +98,7 @@ let path3: Path = users/12/Action.edit
 print(path3.fragments) // ["users", "12", "edit"]
 ```
 
-My composing paths this way, it;'s easy to reuse parts of the path across different endpoints.
+My composing paths this way, it's easy to reuse parts of the path across different endpoints.
 
 ```swift
 let version = "v1"
@@ -131,7 +131,7 @@ var signIn: RequestMiddleware = {
 
 ### Bearer Token Authentication
 
-````swift
+```swift
 import HTTPRequestBuilder
 
 @RequestBuilder
@@ -140,6 +140,7 @@ var signIn: RequestMiddleware = {
   Method.get
   bearerToken("some-token")
 }
+```
 
 ## Custom Middleware
 
@@ -153,7 +154,7 @@ func myHeaderMiddleware(
 ) -> RequestMiddleware {
   header(key: "X-Custom-Header", value: value)
 }
-````
+```
 
 Your custom middleware can then be used in the same way as the built-in middleware.
 
@@ -171,3 +172,7 @@ var myRequest: RequestMiddleware = {
 ## License
 
 This library is released under the MIT license. See LICENSE for details.
+
+```
+
+```
