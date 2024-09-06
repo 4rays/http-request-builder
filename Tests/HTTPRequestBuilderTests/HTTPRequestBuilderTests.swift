@@ -21,21 +21,75 @@ final class HTTPRequestBuilderTests: XCTestCase {
   }
 
   func testPathCustomOperators() {
-    let path: Path = "users" / "12"
-    XCTAssertEqual(path.fragments, ["users", "12"])
+    let path1: Path = "users" / "12"
+    XCTAssertEqual(path1.fragments, ["users", "12"])
+
+    let users = "users"
+
+    let path2: Path = users / "12"
+    XCTAssertEqual(path2.fragments, ["users", "12"])
+
+    let path3: Path = users / 3
+    XCTAssertEqual(path3.fragments, ["users", "3"])
+
+    enum Action: String {
+      case edit
+      case view
+    }
+
+    let path4: Path = users / Action.edit
+    XCTAssertEqual(path4.fragments, ["users", "edit"])
   }
 
   func testResultBuilder() throws {
     @RequestBuilder
-    var postRequest: RequestMiddleware {
-      requestMethod(.post)
-      requestHeader(key: "Content-Type", value: "application/json")
+    var example: RequestMiddleware {
+      path("/users/12")
+      postRequest
+      header(key: "Content-Type", value: "application/json")
     }
 
     let request = Request()
-    let newRequest = try postRequest(request)
+    let newRequest = try example(request)
 
     XCTAssertEqual(newRequest.method, .post)
     XCTAssertEqual(newRequest.headers["Content-Type"], "application/json")
+    XCTAssertEqual(newRequest.path.fragments, ["users", "12"])
   }
+
+  func testResultBuilder_alternateSyntax() throws {
+    @RequestBuilder
+    var example: RequestMiddleware {
+      "/users/12"
+      Method.post
+      header(key: "Content-Type", value: "application/json")
+    }
+
+    let request = Request()
+    let newRequest = try example(request)
+
+    XCTAssertEqual(newRequest.method, .post)
+    XCTAssertEqual(newRequest.headers["Content-Type"], "application/json")
+    XCTAssertEqual(newRequest.path.fragments, ["users", "12"])
+  }
+
+  func testURLRequestConversion() throws {
+    @RequestBuilder
+    var example: RequestMiddleware {
+      path("/users/12")
+      postRequest
+      header(key: "Content-Type", value: "application/json")
+    }
+
+    let request = try example(
+      Request()
+    )
+
+    let urlRequest = try request.urlRequest(baseURL: "https://api.example.com")
+
+    XCTAssertEqual(urlRequest.httpMethod, "POST")
+    XCTAssertEqual(urlRequest.allHTTPHeaderFields?["Content-Type"], "application/json")
+    XCTAssertEqual(urlRequest.url, URL(string: "https://api.example.com/users/12"))
+  }
+
 }

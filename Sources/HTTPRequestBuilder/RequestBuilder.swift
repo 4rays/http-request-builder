@@ -9,8 +9,8 @@
 /// }
 /// ```
 @resultBuilder
-struct RequestBuilder {
-  static func buildBlock(_ components: RequestMiddleware...) -> RequestMiddleware {
+public struct RequestBuilder {
+  public static func buildBlock(_ components: RequestMiddleware...) -> RequestMiddleware {
     {
       try components.reduce($0) { transformed, component in
         return try component(transformed)
@@ -18,19 +18,40 @@ struct RequestBuilder {
     }
   }
 
-  static func buildOptional(
+  public static func buildArray(_ components: [RequestMiddleware]) -> RequestMiddleware {
+    {
+      try components.reduce($0) { transformed, component in
+        return try component(transformed)
+      }
+    }
+  }
+
+  public static func buildExpression(_ middleware: @escaping RequestMiddleware) -> RequestMiddleware
+  {
+    middleware
+  }
+
+  public static func buildExpression(_ urlPath: Path) -> RequestMiddleware {
+    path(urlPath)
+  }
+
+  public static func buildExpression(_ urlMethod: Method) -> RequestMiddleware {
+    method(urlMethod)
+  }
+
+  public static func buildOptional(
     _ component: RequestMiddleware?
   ) -> RequestMiddleware {
     component ?? identity
   }
 
-  static func buildEither(
+  public static func buildEither(
     first component: @escaping RequestMiddleware
   ) -> RequestMiddleware {
     component
   }
 
-  static func buildEither(
+  public static func buildEither(
     second component: @escaping RequestMiddleware
   ) -> RequestMiddleware {
     component

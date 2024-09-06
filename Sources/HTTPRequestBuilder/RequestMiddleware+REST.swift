@@ -1,16 +1,16 @@
 import Foundation
 
 /// A GET request middleware.
-public let getRequest = requestMethod(.get)
+public let getRequest = method(.get)
 
 /// A request middleware for JSON content type.
-public let jsonContentRequest = requestHeader(
+public let jsonContentRequest = header(
   key: "Content-Type",
   value: "application/json; charset=utf-8"
 )
 
 /// A request middleware for JSON accept type.
-public let acceptRequest = requestHeader(
+public let acceptRequest = header(
   key: "Accept",
   value: "application/json; charset=utf-8"
 )
@@ -25,28 +25,28 @@ public var jsonRequest: RequestMiddleware {
 /// A POST request middleware.
 @RequestBuilder
 public var postRequest: RequestMiddleware {
-  requestMethod(.post)
+  method(.post)
   jsonRequest
 }
 
 /// A PUT request middleware.
 @RequestBuilder
 public var putRequest: RequestMiddleware {
-  requestMethod(.put)
+  method(.put)
   jsonRequest
 }
 
 /// A PATCH request middleware.
 @RequestBuilder
 public var patchRequest: RequestMiddleware {
-  requestMethod(.patch)
+  method(.patch)
   jsonRequest
 }
 
 /// A DELETE request middleware.
 @RequestBuilder
 public var deleteRequest: RequestMiddleware {
-  requestMethod(.delete)
+  method(.delete)
   jsonRequest
 }
 
@@ -57,11 +57,11 @@ public var deleteRequest: RequestMiddleware {
 /// - Returns: A request middleware.
 @RequestBuilder
 public func post<T>(
-  body: T,
+  _ payload: T,
   encoder: JSONEncoder = .init()
 ) -> RequestMiddleware where T: Encodable {
   postRequest
-  requestBody(body, encoder: encoder)
+  body(payload, encoder: encoder)
 }
 
 /// A POST request middleware for a data body.
@@ -72,7 +72,7 @@ public func post(
   data: Data
 ) -> RequestMiddleware {
   postRequest
-  requestBody(data)
+  body(data)
 }
 
 /// A PUT request middleware for an Encodable type as body.
@@ -82,11 +82,11 @@ public func post(
 /// - Returns: A request middleware.
 @RequestBuilder
 public func put<T>(
-  body: T,
+  _ payload: T,
   encoder: JSONEncoder = .init()
 ) -> RequestMiddleware where T: Encodable {
   putRequest
-  requestBody(body, encoder: encoder)
+  body(payload, encoder: encoder)
 }
 
 /// A PUT request middleware using a data body.
@@ -97,7 +97,7 @@ public func put(
   data: Data
 ) -> RequestMiddleware {
   putRequest
-  requestBody(data)
+  body(data)
 }
 
 /// A PATCH request middleware for an Encodable type as body.
@@ -107,11 +107,11 @@ public func put(
 /// - Returns: A request middleware.
 @RequestBuilder
 public func patch<T>(
-  body: T,
+  _ payload: T,
   encoder: JSONEncoder = .init()
 ) -> RequestMiddleware where T: Encodable {
   patchRequest
-  requestBody(body, encoder: encoder)
+  body(payload, encoder: encoder)
 }
 
 /// A PATCH request middleware using a data body.
@@ -122,7 +122,7 @@ public func patch(
   data: Data
 ) -> RequestMiddleware {
   patchRequest
-  requestBody(data)
+  body(data)
 }
 
 /// A DELETE request middleware for an Encodable type as body.
@@ -132,11 +132,11 @@ public func patch(
 /// - Returns: A request middleware.
 @RequestBuilder
 public func delete<T>(
-  body: T,
+  _ payload: T,
   encoder: JSONEncoder = .init()
 ) -> RequestMiddleware where T: Encodable {
   deleteRequest
-  requestBody(body, encoder: encoder)
+  body(payload, encoder: encoder)
 }
 
 /// A DELETE request middleware using a data body.
@@ -147,5 +147,5 @@ public func delete(
   data: Data
 ) -> RequestMiddleware {
   deleteRequest
-  requestBody(data)
+  body(data)
 }

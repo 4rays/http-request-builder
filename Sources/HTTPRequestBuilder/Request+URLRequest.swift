@@ -32,3 +32,20 @@ extension Request {
     return urlRequest
   }
 }
+
+extension URLRequest {
+  public init(
+    _ middleware: RequestMiddleware,
+    baseURL: String,
+    cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
+    timeoutInterval: TimeInterval = 60
+  ) throws {
+    let request = try middleware(Request())
+
+    self = try request.urlRequest(
+      baseURL: baseURL,
+      cachePolicy: cachePolicy,
+      timeoutInterval: timeoutInterval
+    )
+  }
+}

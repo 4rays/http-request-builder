@@ -35,28 +35,46 @@ extension Path: ExpressibleByStringLiteral {
 }
 
 // MARK: - Custom Operators
-public func / (
-  lhs: String,
-  rhs: String
-) -> Path {
-  .init([lhs, rhs])
+public func / <T: RawRepresentable>(
+  lhs: Path,
+  rhs: T
+) -> Path where T.RawValue == String {
+  lhs / rhs.rawValue
 }
 
-public func / (
-  lhs: Path,
-  rhs: String
-) -> Path {
-  var new = lhs
-  new.fragments.append(rhs)
+public func / <T: RawRepresentable>(
+  lhs: T,
+  rhs: T
+) -> Path where T.RawValue == String {
+  var new = Path(lhs.rawValue)
+  new.fragments.append(rhs.rawValue)
+  return new
+}
+
+public func / <T: RawRepresentable>(
+  lhs: CustomStringConvertible,
+  rhs: T
+) -> Path where T.RawValue == String {
+  var new = Path(lhs.description)
+  new.fragments.append(rhs.rawValue)
+  return new
+}
+
+public func / <T: RawRepresentable>(
+  lhs: T,
+  rhs: CustomStringConvertible
+) -> Path where T.RawValue == String {
+  var new = Path(lhs.rawValue)
+  new.fragments.append(rhs.description)
   return new
 }
 
 public func / (
   lhs: Path,
-  rhs: [String]
+  rhs: [CustomStringConvertible]
 ) -> Path {
   var new = lhs
-  new.fragments.append(contentsOf: rhs)
+  new.fragments.append(contentsOf: rhs.map(\.description))
   return new
 }
 
@@ -65,6 +83,15 @@ public func / (
   rhs: CustomStringConvertible
 ) -> Path {
   var new = lhs
+  new.fragments.append(rhs.description)
+  return new
+}
+
+public func / (
+  lhs: CustomStringConvertible,
+  rhs: CustomStringConvertible
+) -> Path {
+  var new = Path(lhs.description)
   new.fragments.append(rhs.description)
   return new
 }

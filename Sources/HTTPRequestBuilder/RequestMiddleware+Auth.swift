@@ -4,7 +4,7 @@ import Foundation
 /// - Parameter token: The Bearer token to use.
 /// - Returns: A request middleware.
 public func bearerAuth(_ token: String) -> RequestMiddleware {
-  requestHeader(key: "Authorization", value: "Bearer \(token)")
+  header(key: "Authorization", value: "Bearer \(token)")
 }
 
 /// Add a basic auth header to the request.
@@ -17,5 +17,5 @@ public func basicAuth(
   password: String
 ) -> RequestMiddleware {
   let credentials = Data("\(username):\(password)".utf8).base64EncodedString()
-  return requestHeader(key: "Authorization", value: "Basic \(credentials)")
+  return header(key: "Authorization", value: "Basic \(credentials)")
 }

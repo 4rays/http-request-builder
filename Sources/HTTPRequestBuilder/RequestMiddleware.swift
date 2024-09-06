@@ -6,12 +6,25 @@ public typealias RequestMiddleware = @Sendable (Request) throws -> (Request)
 /// The identity middleware that does nothing.
 public let identity: RequestMiddleware = { $0 }
 
+/// Add path components to the request.
+/// - Parameter components: The path components to add.
+/// - Returns: A request middleware.
+public func path(
+  _ path: Path
+) -> RequestMiddleware {
+  { request in
+    var newRequest = request
+    newRequest.path = path
+    return newRequest
+  }
+}
+
 /// Add headers to the request.
 /// - Parameters:
 ///  - key: The header key.
 ///  - value: The header value.
 /// - Returns: A request middleware.
-public func requestHeader(
+public func header(
   key: String,
   value: String
 ) -> RequestMiddleware {
@@ -25,7 +38,7 @@ public func requestHeader(
 /// Add a method to the request.
 /// - Parameter method: The HTTP method to use.
 /// - Returns: A request middleware.
-public func requestMethod(
+public func method(
   _ method: Method
 ) -> RequestMiddleware {
   { request in
@@ -40,7 +53,7 @@ public func requestMethod(
 ///  - content: The content to encode.
 ///  - encoder: The JSON encoder to use.
 /// - Returns: A request middleware.
-public func requestBody<T>(
+public func body<T>(
   _ content: T,
   encoder: JSONEncoder = .init()
 ) -> RequestMiddleware where T: Encodable {
@@ -55,7 +68,7 @@ public func requestBody<T>(
 /// Add queries to the request.
 /// - Parameter content: The queries to add.
 /// - Returns: A request middleware.
-public func requestQueries(
+public func queries(
   _ content: [String: String]
 ) -> RequestMiddleware {
   { request in
