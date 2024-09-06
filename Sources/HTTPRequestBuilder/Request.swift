@@ -1,31 +1,32 @@
 import Foundation
 import HTTPTypes
 
+/// An honest-to-goodness HTTP request.
 public struct Request: Sendable, Hashable {
-  public var method: HTTPMethod
-  public var path: URLPath
-  public var queryItems: [URLQueryItem]
+  public var method: Method
+  public var path: Path
+  public var queryItems: [QueryItem]
   public var headers: [String: String]
-  public var cachePolicy: URLRequest.CachePolicy
-  public var timeoutInterval: TimeInterval
   public var body: Data?
 
   public init(
-    method: HTTPMethod = .get,
-    path: URLPath = .init(),
+    method: Method = .get,
+    path: Path = .init(),
     headers: [String: String] = [:],
-    queryItems: [URLQueryItem] = [],
-    cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
-    timeoutInterval: TimeInterval = 60.0
+    queryItems: [QueryItem] = [],
+    body: Data? = nil
   ) {
     self.method = method
     self.path = path
     self.headers = headers
     self.queryItems = queryItems
-    self.cachePolicy = cachePolicy
-    self.timeoutInterval = timeoutInterval
+    self.body = body
   }
 
+  /// The full URL of the request.
+  /// - Parameter baseURL: The base URL to use.
+  /// - Throws: `RequestError` if the base URL is missing or invalid.
+  /// - Returns: A URL.
   public func fullURL(with baseURL: String) throws -> URL {
     guard
       var baseURL = URL(string: baseURL)
@@ -51,7 +52,7 @@ public struct Request: Sendable, Hashable {
       throw RequestError.malformedRequestURL
     }
 
-    components.queryItems = queryItems
+    components.queryItems = queryItems.map(\.urlQueryItem)
 
     guard let urlWithQueries = components.url else {
       throw RequestError.malformedRequestURL

@@ -1,4 +1,5 @@
-public enum HTTPMethod: String, Sendable, Hashable {
+/// An HTTP method.
+public enum Method: String, Sendable, Hashable {
   case get = "GET"
   case put = "PUT"
   case patch = "PATCH"

@@ -2,10 +2,17 @@ import Foundation
 
 extension Request {
   /// Creates a Foundation `URLRequest`` from the request.
-  /// - Parameter baseURL: The base URL to use.
+  /// - Parameters:
+  ///  - baseURL: The base URL to use.
+  ///  - cachePolicy: The cache policy to use.
+  ///  - timeoutInterval: The timeout interval to use.
   /// - Throws: `RequestError` if the base URL is missing or invalid.
   /// - Returns: A URL request.
-  public func urlRequest(baseURL: String) throws -> URLRequest {
+  public func urlRequest(
+    baseURL: String,
+    cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
+    timeoutInterval: TimeInterval = 60
+  ) throws -> URLRequest {
     var urlRequest = URLRequest(
       url: try fullURL(with: baseURL),
       cachePolicy: cachePolicy,

@@ -1,20 +1,32 @@
 import Foundation
 
-public struct URLPath: Hashable, Sendable {
+/// A type representing a URL path.
+public struct Path: Hashable, Sendable {
+  /// The fragments of the path.
   public var fragments: [String]
 }
 
-extension URLPath: ExpressibleByStringLiteral {
+extension Path: ExpressibleByStringLiteral {
   public init(_ fragments: [String] = []) {
     self.fragments = fragments
   }
 
   public init(_ string: String) {
-    self.fragments = string.components(separatedBy: "/")
+    guard !string.isEmpty
+    else {
+      self.fragments = []
+      return
+    }
+
+    if string.first == "/" {
+      self.fragments = string.dropFirst().components(separatedBy: "/")
+    } else {
+      self.fragments = string.components(separatedBy: "/")
+    }
   }
 
   public init(stringLiteral value: String) {
-    self.fragments = value.components(separatedBy: "/")
+    self.init(value)
   }
 
   public var fullPath: String {
@@ -26,32 +38,32 @@ extension URLPath: ExpressibleByStringLiteral {
 public func / (
   lhs: String,
   rhs: String
-) -> URLPath {
+) -> Path {
   .init([lhs, rhs])
 }
 
 public func / (
-  lhs: URLPath,
+  lhs: Path,
   rhs: String
-) -> URLPath {
+) -> Path {
   var new = lhs
   new.fragments.append(rhs)
   return new
 }
 
 public func / (
-  lhs: URLPath,
+  lhs: Path,
   rhs: [String]
-) -> URLPath {
+) -> Path {
   var new = lhs
   new.fragments.append(contentsOf: rhs)
   return new
 }
 
 public func / (
-  lhs: URLPath,
+  lhs: Path,
   rhs: CustomStringConvertible
-) -> URLPath {
+) -> Path {
   var new = lhs
   new.fragments.append(rhs.description)
   return new

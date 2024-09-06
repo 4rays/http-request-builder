@@ -1,3 +1,13 @@
+/// A result builder for composing request middlewares.
+///
+/// This builder allows you to compose multiple request middlewares together. For example:
+///
+/// ```swift
+/// let middleware = requestMiddleware {
+///   requestMethod(.get)
+///   requestHeader(key: "Content-Type", value: "application/json")
+/// }
+/// ```
 @resultBuilder
 struct RequestBuilder {
   static func buildBlock(_ components: RequestMiddleware...) -> RequestMiddleware {

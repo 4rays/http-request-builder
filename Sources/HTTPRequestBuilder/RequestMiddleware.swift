@@ -3,13 +3,6 @@ import Foundation
 /// A function that transforms a request.
 public typealias RequestMiddleware = @Sendable (Request) throws -> (Request)
 
-/// A result builder for request middleware.
-public func requestMiddleware(
-  @RequestBuilder build: () -> RequestMiddleware
-) -> RequestMiddleware {
-  build()
-}
-
 /// The identity middleware that does nothing.
 public let identity: RequestMiddleware = { $0 }
 
@@ -33,7 +26,7 @@ public func requestHeader(
 /// - Parameter method: The HTTP method to use.
 /// - Returns: A request middleware.
 public func requestMethod(
-  _ method: HTTPMethod
+  _ method: Method
 ) -> RequestMiddleware {
   { request in
     var newRequest = request
@@ -70,37 +63,11 @@ public func requestQueries(
     newRequest.queryItems = content.reduce(
       [],
       { items, keyValue in
-        let item = URLQueryItem(name: keyValue.0, value: keyValue.1)
+        let item = QueryItem(name: keyValue.0, value: keyValue.1)
         var newItems = items
         newItems.append(item)
         return newItems
       })
-    return newRequest
-  }
-}
-
-/// Add a cache policy to the request.
-/// - Parameter cachePolicy: The cache policy to use.
-/// - Returns: A request middleware.
-public func requestCachePolicy(
-  _ cachePolicy: URLRequest.CachePolicy
-) -> RequestMiddleware {
-  { request in
-    var newRequest = request
-    newRequest.cachePolicy = cachePolicy
-    return newRequest
-  }
-}
-
-/// Add a timeout interval to the request.
-/// - Parameter interval: The timeout interval to use.
-/// - Returns: A request middleware.
-public func requestTimeoutInterval(
-  _ interval: TimeInterval
-) -> RequestMiddleware {
-  { request in
-    var newRequest = request
-    newRequest.timeoutInterval = interval
     return newRequest
   }
 }
