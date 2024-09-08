@@ -1,0 +1,30 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.swift"
+      - "**.yml"
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: tests
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - "swift:5.10"
+    container:
+      image: ${{ matrix.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Test
+        run: swift test
