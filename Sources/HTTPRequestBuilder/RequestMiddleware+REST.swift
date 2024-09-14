@@ -59,7 +59,7 @@ public var deleteRequest: RequestMiddleware {
 public func post<T>(
   _ payload: T,
   encoder: JSONEncoder = .init()
-) -> RequestMiddleware where T: Encodable {
+) -> RequestMiddleware where T: Encodable & Sendable {
   postRequest
   body(payload, encoder: encoder)
 }
@@ -84,7 +84,7 @@ public func post(
 public func put<T>(
   _ payload: T,
   encoder: JSONEncoder = .init()
-) -> RequestMiddleware where T: Encodable {
+) -> RequestMiddleware where T: Encodable & Sendable {
   putRequest
   body(payload, encoder: encoder)
 }
@@ -109,7 +109,7 @@ public func put(
 public func patch<T>(
   _ payload: T,
   encoder: JSONEncoder = .init()
-) -> RequestMiddleware where T: Encodable {
+) -> RequestMiddleware where T: Encodable & Sendable {
   patchRequest
   body(payload, encoder: encoder)
 }
@@ -134,7 +134,7 @@ public func patch(
 public func delete<T>(
   _ payload: T,
   encoder: JSONEncoder = .init()
-) -> RequestMiddleware where T: Encodable {
+) -> RequestMiddleware where T: Encodable & Sendable {
   deleteRequest
   body(payload, encoder: encoder)
 }

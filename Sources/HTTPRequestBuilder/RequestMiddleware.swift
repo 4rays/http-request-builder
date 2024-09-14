@@ -23,7 +23,7 @@ public func path(
 ///  - Parameter component: The path component to append.
 ///  - Returns: A request middleware.
 public func pathAppending(
-  _ component: CustomStringConvertible
+  _ component: CustomStringConvertible & Sendable
 ) -> RequestMiddleware {
   { request in
     var newRequest = request
@@ -35,7 +35,7 @@ public func pathAppending(
 /// Append to the path of the request.
 ///  - Parameter component: The path component to append.
 ///  - Returns: A request middleware.
-public func pathAppending<T: RawRepresentable>(
+public func pathAppending<T: RawRepresentable & Sendable>(
   _ component: T
 ) -> RequestMiddleware where T.RawValue == String {
   { request in
@@ -82,7 +82,7 @@ public func method(
 public func body<T>(
   _ content: T,
   encoder: JSONEncoder = .init()
-) -> RequestMiddleware where T: Encodable {
+) -> RequestMiddleware where T: Encodable & Sendable {
   { request in
     guard request.method != .get else { return request }
     var newRequest = request
