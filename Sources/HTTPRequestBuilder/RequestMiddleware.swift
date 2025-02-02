@@ -27,7 +27,7 @@ public func pathAppending(
 ) -> RequestMiddleware {
   { request in
     var newRequest = request
-    newRequest.path = request.path / component
+    newRequest.path = request.path.appending(component)
     return newRequest
   }
 }
@@ -40,7 +40,7 @@ public func pathAppending<T: RawRepresentable & Sendable>(
 ) -> RequestMiddleware where T.RawValue == String {
   { request in
     var newRequest = request
-    newRequest.path = request.path / component
+    newRequest.path = request.path.appending(component)
     return newRequest
   }
 }
