@@ -83,7 +83,7 @@ print(path1.fragments) // ["users", "12"]
 
 let users = "users"
 
-let path2: Path = users/"12"
+let path2 = Path(users).appending("12")
 print(path2.fragments) // ["users", "12"]
 
 enum Action: String {
@@ -91,7 +91,7 @@ enum Action: String {
   case view
 }
 
-let path3: Path = users/12/Action.edit
+let path3 = Path(users).appending("12").appending(Action.edit)
 print(path3.fragments) // ["users", "12", "edit"]
 ```
 
