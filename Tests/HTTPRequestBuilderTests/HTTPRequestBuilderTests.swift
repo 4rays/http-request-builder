@@ -1,5 +1,5 @@
-import Testing
 import Foundation
+import Testing
 
 @testable import HTTPRequestBuilder
 
@@ -26,15 +26,15 @@ extension Tag {
 }
 
 @Test(.tags(.path, .request)) func pathCustomOperators() {
-  let path1: Path = "users" / "12"
+  let path1 = Path("users", "12")
   #expect(path1.fragments == ["users", "12"])
 
   let users = "users"
 
-  let path2: Path = users / "12"
+  let path2 = Path(users, "12")
   #expect(path2.fragments == ["users", "12"])
 
-  let path3: Path = users / 3
+  let path3 = Path(users).appending(3)
   #expect(path3.fragments == ["users", "3"])
 
   enum Action: String {
@@ -42,14 +42,14 @@ extension Tag {
     case view
   }
 
-  let path4: Path = users / Action.edit
+  let path4 = Path(users).appending(Action.edit)
   #expect(path4.fragments == ["users", "edit"])
 
-  let path5 = Path("users") / "12"
+  let path5 = Path("users").appending("12")
   #expect(path5.fragments == ["users", "12"])
 
   func apiVersion(_ version: Int) -> Path {
-    .init("v\(version)") / path5.fragments
+    Path("v\(version)").appending(path5.fragments)
   }
 
   let path6 = apiVersion(1)

@@ -11,6 +11,10 @@ extension Path: ExpressibleByStringLiteral {
     self.fragments = fragments
   }
 
+  public init(_ fragments: String...) {
+    self.fragments = fragments
+  }
+
   public init(_ string: String) {
     guard !string.isEmpty
     else {
@@ -32,66 +36,29 @@ extension Path: ExpressibleByStringLiteral {
   public var fullPath: String {
     fragments.joined(separator: "/")
   }
-}
 
-// MARK: - Custom Operators
-public func / <T: RawRepresentable>(
-  lhs: Path,
-  rhs: T
-) -> Path where T.RawValue == String {
-  lhs / rhs.rawValue
-}
+  public func appending(_ fragments: String...) -> Path {
+    var new = self
+    new.fragments.append(contentsOf: fragments)
+    return new
+  }
 
-public func / <T: RawRepresentable>(
-  lhs: T,
-  rhs: T
-) -> Path where T.RawValue == String {
-  var new = Path(lhs.rawValue)
-  new.fragments.append(rhs.rawValue)
-  return new
-}
+  public func appending(_ fragments: [String]) -> Path {
+    var new = self
+    new.fragments.append(contentsOf: fragments)
+    return new
+  }
 
-public func / <T: RawRepresentable>(
-  lhs: CustomStringConvertible,
-  rhs: T
-) -> Path where T.RawValue == String {
-  var new = Path(lhs.description)
-  new.fragments.append(rhs.rawValue)
-  return new
-}
+  public func appending<T: RawRepresentable>(_ rawRepresentable: T...) -> Path
+  where T.RawValue == String {
+    var new = self
+    new.fragments.append(contentsOf: rawRepresentable.map(\.rawValue))
+    return new
+  }
 
-public func / <T: RawRepresentable>(
-  lhs: T,
-  rhs: CustomStringConvertible
-) -> Path where T.RawValue == String {
-  var new = Path(lhs.rawValue)
-  new.fragments.append(rhs.description)
-  return new
-}
-
-public func / (
-  lhs: Path,
-  rhs: [String]
-) -> Path {
-  var new = lhs
-  new.fragments.append(contentsOf: rhs)
-  return new
-}
-
-public func / (
-  lhs: Path,
-  rhs: CustomStringConvertible
-) -> Path {
-  var new = lhs
-  new.fragments.append(rhs.description)
-  return new
-}
-
-public func / (
-  lhs: CustomStringConvertible,
-  rhs: CustomStringConvertible
-) -> Path {
-  var new = Path(lhs.description)
-  new.fragments.append(rhs.description)
-  return new
+  public func appending(_ description: CustomStringConvertible...) -> Path {
+    var new = self
+    new.fragments.append(contentsOf: description.map(\.description))
+    return new
+  }
 }
