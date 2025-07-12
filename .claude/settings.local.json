@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(swift package:*)",
+      "Bash(swift outdated)",
+      "Bash(tuist:*)",
+      "Bash(gh:*)"
+    ],
+    "deny": []
+  }
+}
