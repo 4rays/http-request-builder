@@ -1,6 +1,7 @@
-# HTTPRequestBuilder
+# 🪻 http-request-builder
 
 A Swift package to help build HTTP requests in a composable and type-safe way.
+It is part of the [Indigo Stack](https://indigostack.org).
 
 ## Installation
 
@@ -8,7 +9,7 @@ Add the following to your `Package.swift` file:
 
 ```swift
 dependencies: [
-  .package(url: "", from: "0.9.0")
+  .package(url: "https://github.com/indigo-ce/http-request-builder.git", from: "0.9.0")
 ]
 ```
 
@@ -22,8 +23,6 @@ platform specific requests, such as `URLRequest` in Foundation.
 Function composition shines in this task as REST APIs are often built
 using the same middleware approach, resulting in most requests sharing
 a lot of the same logic such as paths, authentication, headers, etc.
-
-Author note: I gave a talk about this topic here.
 
 ## Usage
 
